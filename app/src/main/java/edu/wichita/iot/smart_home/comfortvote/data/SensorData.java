@@ -66,13 +66,11 @@ public class SensorData {
     public long caloriesToday;
 
     @DatabaseField
-    public long caloriesInSec;
-
-    @DatabaseField
     public long caloriesTS;
 
+
     @DatabaseField
-    public float skinTempreture;
+    public float skinTemperature;
 
     @DatabaseField
     public long uVExposureToday;
@@ -126,19 +124,14 @@ public class SensorData {
     public long pedometer;
 
     @DatabaseField
+    public long pedometerTS;
+
+    @DatabaseField
     public double rrInterval;
 
     @DatabaseField
     public String statusStr;
 
-    @DatabaseField
-    public int vote;
-
-    @DatabaseField
-    public float roomTempreture;
-
-    @DatabaseField
-    public float roomHumidity;
 
     public String getCsvFormatHeader(){
         return  "currentTime, "+
@@ -158,9 +151,8 @@ public class SensorData {
                 "temperature, " +
                 "resistance, " +
                 "caloriesToday, " +
-                "caloriesInSec, " +
                 "caloriesTS, " +
-                "skinTempreture, " +
+                "skinTemperature, " +
                 "uVExposureToday, " +
                 "uVIndexLevel, " +
                 "motionType, " +
@@ -178,11 +170,9 @@ public class SensorData {
                 "flightsStairsDescended, " +
                 "bandContactState, " +
                 "pedometer, " +
+                "pedometerTS, " +
                 "rrInterval, " +
-                "statusStr, " +
-                "vote, " +
-                "roomTempreture, " +
-                "roomHumidity \n";
+                "statusStr \n";
     }
 
     public String getCsvFormat(){
@@ -203,9 +193,8 @@ public class SensorData {
                         String.valueOf(temperature) + "," +
                         String.valueOf(resistance) + "," +
                         String.valueOf(caloriesToday) + "," +
-                        String.valueOf(caloriesInSec) + "," +
                         String.valueOf(caloriesTS) + "," +
-                        String.valueOf(skinTempreture) + "," +
+                        String.valueOf(skinTemperature) + "," +
                         String.valueOf(uVExposureToday) + "," +
                         String.valueOf(uVIndexLevel) + "," +
                         String.valueOf(motionType) + "," +
@@ -223,11 +212,9 @@ public class SensorData {
                         String.valueOf(flightsStairsDescended) + "," +
                         String.valueOf(bandContactState) + "," +
                         String.valueOf(pedometer) + "," +
+                        String.valueOf(pedometerTS) + "," +
                         String.valueOf(rrInterval) + "," +
-                        String.valueOf(statusStr) + "," +
-                        String.valueOf(vote) + "," +
-                        String.valueOf(roomTempreture) + "," +
-                        String.valueOf(roomHumidity) + "\n" ;
+                        String.valueOf(statusStr) +  "\n" ;
     }
 
 
@@ -251,9 +238,8 @@ public class SensorData {
         sensorData.temperature = comfData.temperature;
         sensorData.resistance = comfData.resistance;
         sensorData.caloriesToday = comfData.caloriesToday;
-        sensorData.caloriesInSec = comfData.caloriesInSec;
         sensorData.caloriesTS = comfData.caloriesTS;
-        sensorData.skinTempreture = comfData.skinTempreture;
+        sensorData.skinTemperature = comfData.skinTemperature;
         sensorData.uVExposureToday = comfData.uVExposureToday;
         sensorData.uVIndexLevel = comfData.uVIndexLevel;
         sensorData.motionType = comfData.motionType;
@@ -271,11 +257,10 @@ public class SensorData {
         sensorData.flightsStairsDescended = comfData.flightsStairsDescended;
         sensorData.bandContactState = comfData.bandContactState;
         sensorData.pedometer = comfData.pedometer;
+        sensorData.pedometerTS = comfData.pedometerTS;
         sensorData.rrInterval = comfData.rrInterval;
         sensorData.statusStr = comfData.statusStr;
-        sensorData.vote = comfData.vote;
-        sensorData.roomTempreture = comfData.roomTempreture;
-        sensorData.roomHumidity = comfData.roomHumidity;
+
         return sensorData;
     }
 
