@@ -34,7 +34,7 @@ public class ComfService extends Service {
     private DatabaseHelper databaseHelper = null;
 
     // constant
-    public static final long NOTIFY_INTERVAL = 10000 * 20; // 10 seconds
+    public static final long NOTIFY_INTERVAL = 1000 * 300; // 300 seconds
 
     // run on another Thread to avoid crash
     private Handler mHandler = new Handler();
@@ -44,7 +44,7 @@ public class ComfService extends Service {
     private SmartBand smartBand;
     private long activeTime = 0;
     private long storeTime = 0;
-    private static final long SENSOR_WAIT_TIME = 5 * 1000;
+    private static final long SENSOR_WAIT_TIME = 20 * 1000;
 
     @Override
     public IBinder onBind(Intent intent) {
