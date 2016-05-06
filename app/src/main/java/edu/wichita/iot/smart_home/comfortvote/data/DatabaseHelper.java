@@ -1,6 +1,7 @@
 package edu.wichita.iot.smart_home.comfortvote.data;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -138,5 +140,19 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void clearDB( ) throws SQLException{
         TableUtils.clearTable(connectionSource, ComfData.class);
     }
+
+	public List<SensorData> getLasSensorData(int number){
+		List<SensorData> list=null;
+		try {
+			QueryBuilder<SensorData, Integer> builder = getSendorDataDao().queryBuilder();
+			builder.limit(number);
+			builder.orderBy("id", false);  // true for ascending, false for descending
+			list = getSendorDataDao().query(builder.prepare());  // returns list of ten items
+		} catch (SQLException e){
+			System.out.println(e);
+		}
+		return list;
+	}
+
 
 }
