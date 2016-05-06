@@ -87,6 +87,7 @@ public class SmartBand {
         public void onBandPedometerChanged(BandPedometerEvent event) {
             try {
                 comfData.pedometer = event.getStepsToday();
+                comfData.pedometerTS = event.getTimestamp();
             } catch (InvalidBandVersionException e) {
                 e.printStackTrace();
             }
@@ -148,7 +149,7 @@ public class SmartBand {
         @Override
         public void onBandSkinTemperatureChanged(BandSkinTemperatureEvent event) {
             if (event != null){
-                comfData.skinTempreture = event.getTemperature();
+                comfData.skinTemperature = event.getTemperature();
             }
         }
     };
@@ -175,16 +176,8 @@ public class SmartBand {
         public void onBandCaloriesChanged(BandCaloriesEvent event) {
             if (event != null){
                 try {
-
-                    System.out.print("");
-                    long caloriesTodayTemp = event.getCaloriesToday();
-                    long caloriesTSTemp = event.getTimestamp();
-
-
-                        comfData.caloriesInSec = (caloriesTodayTemp - comfData.caloriesToday)/ (comfData.caloriesTS - caloriesTSTemp) * 1000*60;
-                        comfData.caloriesToday = caloriesTodayTemp;
-                        comfData.caloriesTS = caloriesTSTemp;
-
+                    comfData.caloriesToday = event.getCaloriesToday();
+                    comfData.caloriesTS = event.getTimestamp();
                 } catch (InvalidBandVersionException e) {
                     e.printStackTrace();
                 }
