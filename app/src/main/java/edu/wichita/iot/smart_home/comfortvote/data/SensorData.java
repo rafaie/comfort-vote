@@ -1,9 +1,12 @@
 package edu.wichita.iot.smart_home.comfortvote.data;
 
+import android.text.format.DateFormat;
+
 import com.j256.ormlite.field.DatabaseField;
 
 /**
  * Created by Mostafa on 4/1/2016.
+ *
  */
 public class SensorData {
 
@@ -226,4 +229,54 @@ public class SensorData {
                         String.valueOf(roomTempreture) + "," +
                         String.valueOf(roomHumidity) + "\n" ;
     }
+
+
+    public static SensorData newInstance(final ComfData comfData){
+        SensorData sensorData = new SensorData();
+
+        sensorData.currentTime = DateFormat.format("MM/dd/yyyy HH:mm:ss", System.currentTimeMillis()).toString();
+        sensorData.heartRateQuality = comfData.heartRateQuality;
+        sensorData.heartRate = comfData.heartRate;
+        sensorData.accelerometerX = comfData.accelerometerX;
+        sensorData.accelerometerY = comfData.accelerometerY;
+        sensorData.accelerometerZ = comfData.accelerometerZ;
+        sensorData.accelerometerX2 = comfData.accelerometerX2;
+        sensorData.accelerometerY2 = comfData.accelerometerY2;
+        sensorData.accelerometerZ2 = comfData.accelerometerZ2;
+        sensorData.angAccelerometerX = comfData.angAccelerometerX;
+        sensorData.angAccelerometerY = comfData.angAccelerometerY;
+        sensorData.angAccelerometerZ = comfData.angAccelerometerZ;
+        sensorData.brightnessVal = comfData.brightnessVal;
+        sensorData.airPressure = comfData.airPressure;
+        sensorData.temperature = comfData.temperature;
+        sensorData.resistance = comfData.resistance;
+        sensorData.caloriesToday = comfData.caloriesToday;
+        sensorData.caloriesInSec = comfData.caloriesInSec;
+        sensorData.caloriesTS = comfData.caloriesTS;
+        sensorData.skinTempreture = comfData.skinTempreture;
+        sensorData.uVExposureToday = comfData.uVExposureToday;
+        sensorData.uVIndexLevel = comfData.uVIndexLevel;
+        sensorData.motionType = comfData.motionType;
+        sensorData.distance = comfData.distance;
+        sensorData.pace = comfData.pace;
+        sensorData.speed = comfData.speed;
+        sensorData.totalLoss = comfData.totalLoss;
+        sensorData.totalGain = comfData.totalGain;
+        sensorData.steppingGain = comfData.steppingGain;
+        sensorData.steppingLoss = comfData.steppingLoss;
+        sensorData.steppingAscended = comfData.steppingAscended;
+        sensorData.steppingDescended = comfData.steppingDescended;
+        sensorData.rate = comfData.rate;
+        sensorData.flightsStairsAscended = comfData.flightsStairsAscended;
+        sensorData.flightsStairsDescended = comfData.flightsStairsDescended;
+        sensorData.bandContactState = comfData.bandContactState;
+        sensorData.pedometer = comfData.pedometer;
+        sensorData.rrInterval = comfData.rrInterval;
+        sensorData.statusStr = comfData.statusStr;
+        sensorData.vote = comfData.vote;
+        sensorData.roomTempreture = comfData.roomTempreture;
+        sensorData.roomHumidity = comfData.roomHumidity;
+        return sensorData;
+    }
+
 }
