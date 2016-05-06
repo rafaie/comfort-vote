@@ -178,6 +178,56 @@ public class ComfData {
     public String clothing;
 
 
+    public ComfData(ComfData comfData){
+
+        this.heartRateQuality = comfData.heartRateQuality;
+        this.heartRate = comfData.heartRate;
+        this.accelerometerX = comfData.accelerometerX;
+        this.accelerometerY = comfData.accelerometerY;
+        this.accelerometerZ = comfData.accelerometerZ;
+        this.accelerometerX2 = comfData.accelerometerX2;
+        this.accelerometerY2 = comfData.accelerometerY2;
+        this.accelerometerZ2 = comfData.accelerometerZ2;
+        this.angAccelerometerX = comfData.angAccelerometerX;
+        this.angAccelerometerY = comfData.angAccelerometerY;
+        this.angAccelerometerZ = comfData.angAccelerometerZ;
+        this.brightnessVal = comfData.brightnessVal;
+        this.airPressure = comfData.airPressure;
+        this.temperature = comfData.temperature;
+        this.resistance = comfData.resistance;
+        this.caloriesToday = comfData.caloriesToday;
+        this.caloriesTS = comfData.caloriesTS;
+        this.caloriesToday2 = comfData.caloriesToday2;
+        this.caloriesTS2 = comfData.caloriesTS2;
+        this.caloriesToday3 = comfData.caloriesToday3;
+        this.caloriesTS3 = comfData.caloriesTS3;
+        this.skinTemperature = comfData.skinTemperature;
+        this.uVExposureToday = comfData.uVExposureToday;
+        this.uVIndexLevel = comfData.uVIndexLevel;
+        this.motionType = comfData.motionType;
+        this.distance = comfData.distance;
+        this.pace = comfData.pace;
+        this.speed = comfData.speed;
+        this.totalLoss = comfData.totalLoss;
+        this.totalGain = comfData.totalGain;
+        this.steppingGain = comfData.steppingGain;
+        this.steppingLoss = comfData.steppingLoss;
+        this.steppingAscended = comfData.steppingAscended;
+        this.steppingDescended = comfData.steppingDescended;
+        this.rate = comfData.rate;
+        this.flightsStairsAscended = comfData.flightsStairsAscended;
+        this.flightsStairsDescended = comfData.flightsStairsDescended;
+        this.bandContactState = comfData.bandContactState;
+        this.pedometer = comfData.pedometer;
+        this.pedometerTS = comfData.pedometerTS;
+        this.pedometer2 = comfData.pedometer2;
+        this.pedometerTS2 = comfData.pedometerTS2;
+        this.pedometer3 = comfData.pedometer3;
+        this.pedometerTS3 = comfData.pedometerTS3;
+        this.rrInterval = comfData.rrInterval;
+        this.statusStr = comfData.statusStr;
+    }
+
     public String getCsvFormatHeader(){
         return  "currentTime, "+
                 "heartRateQuality, " +
