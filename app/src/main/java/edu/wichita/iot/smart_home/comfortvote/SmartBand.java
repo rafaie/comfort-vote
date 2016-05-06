@@ -2,21 +2,8 @@ package edu.wichita.iot.smart_home.comfortvote;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Environment;
-import android.support.v7.app.AlertDialog;
-import android.text.format.DateFormat;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
-import com.j256.ormlite.dao.Dao;
 import com.microsoft.band.BandClient;
 import com.microsoft.band.BandClientManager;
 import com.microsoft.band.BandException;
@@ -37,7 +24,6 @@ import com.microsoft.band.sensors.BandCaloriesEvent;
 import com.microsoft.band.sensors.BandCaloriesEventListener;
 import com.microsoft.band.sensors.BandContactEvent;
 import com.microsoft.band.sensors.BandContactEventListener;
-import com.microsoft.band.sensors.BandContactState;
 import com.microsoft.band.sensors.BandDistanceEvent;
 import com.microsoft.band.sensors.BandDistanceEventListener;
 import com.microsoft.band.sensors.BandGsrEvent;
@@ -55,18 +41,9 @@ import com.microsoft.band.sensors.BandSkinTemperatureEventListener;
 import com.microsoft.band.sensors.BandUVEvent;
 import com.microsoft.band.sensors.BandUVEventListener;
 import com.microsoft.band.sensors.HeartRateConsentListener;
-import com.microsoft.band.sensors.HeartRateQuality;
-import com.microsoft.band.sensors.MotionType;
 import com.microsoft.band.sensors.SampleRate;
-import com.microsoft.band.sensors.UVIndexLevel;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import edu.wichita.iot.smart_home.comfortvote.callback.AppendToLogCallback;
 import edu.wichita.iot.smart_home.comfortvote.callback.SensorUpdateCallback;
@@ -75,10 +52,14 @@ import edu.wichita.iot.smart_home.comfortvote.data.DatabaseHelper;
 
 /**
  * Created by Mostafa on 4/24/2016.
+ *
  */
 
 
 public class SmartBand {
+
+    private static final int RUN_IN_FOREGROUND = 1;
+    private static final int RUN_IN_BACKGROUND = 2;
 
     private ComfData comfData;
 
@@ -86,7 +67,7 @@ public class SmartBand {
     AppendToLogCallback appendToLogCallback;
     int type = 0;
     Activity activity;
-
+    Context context;
 
     private BandClient client = null;
 
@@ -279,10 +260,16 @@ public class SmartBand {
 
 
     public void activate(Activity activity){
-        type = 1;
+        type = RUN_IN_FOREGROUND;
         this.activity = activity;
-        final WeakReference<Activity> reference = new WeakReference<Activity>(activity);
-//        new HeartRateConsentTask().execute(reference);
+        final WeakReference<Activity> reference = new WeakReference<>(activity);
+        new HeartRateConsentTask().execute(reference);
+        new HeartRateSubscriptionTask().execute();
+    }
+
+    public void activateInBackground(Context context){
+        type = RUN_IN_BACKGROUND;
+        this.context = context;
         new HeartRateSubscriptionTask().execute();
     }
 
@@ -357,7 +344,7 @@ public class SmartBand {
                     appendToLogCallback.append("Band isn't connected. Please make sure bluetooth is on and the band is in range.\n");
                 }
             } catch (BandException e) {
-                String exceptionMessage="";
+                String exceptionMessage="It's the default exception message";
                 switch (e.getErrorType()) {
                     case UNSUPPORTED_SDK_VERSION_ERROR:
                         exceptionMessage = "Microsoft Health BandService doesn't support your SDK Version. Please update to latest SDK.\n";
@@ -394,7 +381,7 @@ public class SmartBand {
                     appendToLogCallback.append("Band isn't connected. Please make sure bluetooth is on and the band is in range.\n");
                 }
             } catch (BandException e) {
-                String exceptionMessage="";
+                String exceptionMessage="It's the default exception message";
                 switch (e.getErrorType()) {
                     case UNSUPPORTED_SDK_VERSION_ERROR:
                         exceptionMessage = "Microsoft Health BandService doesn't support your SDK Version. Please update to latest SDK.\n";
@@ -441,11 +428,13 @@ public class SmartBand {
      */
 
     private Context getBaseContext(){
-        if (type == 1){
+        if (type == RUN_IN_FOREGROUND){
             return  activity;
+        } else if (type == RUN_IN_BACKGROUND){
+            return context;
         }
+
         return null;
     }
-
 
 }
