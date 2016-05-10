@@ -48,7 +48,6 @@ import java.lang.ref.WeakReference;
 import edu.wichita.iot.smart_home.comfortvote.callback.AppendToLogCallback;
 import edu.wichita.iot.smart_home.comfortvote.callback.SensorUpdateCallback;
 import edu.wichita.iot.smart_home.comfortvote.data.ComfData;
-import edu.wichita.iot.smart_home.comfortvote.data.DatabaseHelper;
 
 /**
  * Created by Mostafa on 4/24/2016.
@@ -58,27 +57,45 @@ import edu.wichita.iot.smart_home.comfortvote.data.DatabaseHelper;
 
 public class SmartBand {
 
+    public static final int HEART_RATE_SENSOR = 0;
+    public static final int ACCELEROMETER_SENSOR = 1;
+    public static final int ALTIMETER_SENSOR = 2;
+    public static final int BAROMETER_SENSOR = 3;
+    public static final int CALORIE_SENSOR = 4;
+    public static final int CONTACT_SENSOR = 5;
+    public static final int DISTANCE_SENSOR = 6;
+    public static final int GSR_SENSOR = 7;
+    public static final int GYROSCOPE_SENSOR = 8;
+    public static final int PEDOMETER_SENSOR = 9;
+    public static final int RR_INTERVAL_SENSOR = 10;
+    public static final int UV_SENSOR = 11;
+    public static final int AMBIENT_LIGHT_SENSOR = 12;
+    public static final int SKIN_TEMPERATURE_SENSOR = 13;
+
+
     private static final int RUN_IN_FOREGROUND = 1;
     private static final int RUN_IN_BACKGROUND = 2;
+    private static final int RUN_FOR_SAMPLING  = 3;
+
+    // Sample Rate Configuration
+    private final SampleRate SERVICE_SAMPLE_RATE = SampleRate.MS16;
 
     private ComfData comfData;
 
     SensorUpdateCallback sensorUpdateCallback;
     AppendToLogCallback appendToLogCallback;
-    int type = 0;
+    int serviceType = 0;
     Activity activity;
     Context context;
 
     private BandClient client = null;
 
 
-
-    private DatabaseHelper databaseHelper = null;
-
     private BandRRIntervalEventListener mBandRRIntervalEventListener = new BandRRIntervalEventListener() {
         @Override
         public void onBandRRIntervalChanged(BandRRIntervalEvent event) {
             comfData.rrInterval = event.getInterval();
+            sensorUpdateCallback.update(comfData, RR_INTERVAL_SENSOR);
         }
     };
 
@@ -88,6 +105,7 @@ public class SmartBand {
             try {
                 comfData.pedometer = event.getStepsToday();
                 comfData.pedometerTS = event.getTimestamp();
+                sensorUpdateCallback.update(comfData, PEDOMETER_SENSOR);
             } catch (InvalidBandVersionException e) {
                 e.printStackTrace();
             }
@@ -104,6 +122,7 @@ public class SmartBand {
             comfData.angAccelerometerX = event.getAngularVelocityX();
             comfData.angAccelerometerY = event.getAngularVelocityY();
             comfData.angAccelerometerZ = event.getAngularVelocityZ();
+            sensorUpdateCallback.update(comfData, GYROSCOPE_SENSOR);
         }
     };
 
@@ -111,6 +130,7 @@ public class SmartBand {
         @Override
         public void onBandContactChanged(BandContactEvent event) {
             comfData.bandContactState = String.format(" %s ", event.getContactState());
+            sensorUpdateCallback.update(comfData, CONTACT_SENSOR);
         }
     };
 
@@ -126,6 +146,7 @@ public class SmartBand {
             comfData.rate = event.getRate();
             comfData.flightsStairsAscended = event.getFlightsAscended();
             comfData.flightsStairsDescended = event.getFlightsDescended();
+            sensorUpdateCallback.update(comfData, ALTIMETER_SENSOR);
         }
     };
 
@@ -138,6 +159,7 @@ public class SmartBand {
                 comfData.distance = event.getDistanceToday();
                 comfData.pace = event.getPace();
                 comfData.speed = event.getSpeed();
+                sensorUpdateCallback.update(comfData, DISTANCE_SENSOR);
             } catch (InvalidBandVersionException e) {
                 e.printStackTrace();
             }
@@ -150,6 +172,8 @@ public class SmartBand {
         public void onBandSkinTemperatureChanged(BandSkinTemperatureEvent event) {
             if (event != null){
                 comfData.skinTemperature = event.getTemperature();
+                sensorUpdateCallback.update(comfData, SKIN_TEMPERATURE_SENSOR);
+
             }
         }
     };
@@ -162,6 +186,7 @@ public class SmartBand {
                 try {
                     comfData.uVExposureToday = event.getUVExposureToday();
                     comfData.uVIndexLevel = String.format(" %s ", event.getUVIndexLevel());
+                    sensorUpdateCallback.update(comfData, UV_SENSOR);
                 } catch (InvalidBandVersionException e) {
                     e.printStackTrace();
                 }
@@ -178,6 +203,7 @@ public class SmartBand {
                 try {
                     comfData.caloriesToday = event.getCaloriesToday();
                     comfData.caloriesTS = event.getTimestamp();
+                    sensorUpdateCallback.update(comfData, CALORIE_SENSOR);
                 } catch (InvalidBandVersionException e) {
                     e.printStackTrace();
                 }
@@ -191,7 +217,7 @@ public class SmartBand {
         public void onBandGsrChanged(final BandGsrEvent event) {
             if (event != null) {
                 comfData.resistance = event.getResistance();
-                sensorUpdateCallback.update(comfData);
+                sensorUpdateCallback.update(comfData, GSR_SENSOR);
             }
         }
     };
@@ -202,7 +228,7 @@ public class SmartBand {
             if (event != null) {
                 comfData.airPressure = event.getAirPressure();
                 comfData. temperature = event.getTemperature();
-                sensorUpdateCallback.update(comfData);
+                sensorUpdateCallback.update(comfData, BAROMETER_SENSOR);
             }
         }
     };
@@ -212,7 +238,7 @@ public class SmartBand {
         public void onBandAmbientLightChanged(final BandAmbientLightEvent event) {
             if (event != null) {
                 comfData.brightnessVal = event.getBrightness();
-                sensorUpdateCallback.update(comfData);
+                sensorUpdateCallback.update(comfData, AMBIENT_LIGHT_SENSOR);
             }
         }
     };
@@ -224,9 +250,8 @@ public class SmartBand {
             if (event != null) {
                 comfData.heartRate = event.getHeartRate();
                 comfData.heartRateQuality = String.format(" %s ",event.getQuality());
-//                appendToLog("");
                 comfData.statusStr = String.format("%s",  comfData.heartRateQuality);
-                sensorUpdateCallback.update(comfData);
+                sensorUpdateCallback.update(comfData, HEART_RATE_SENSOR);
             }
         }
     };
@@ -239,7 +264,7 @@ public class SmartBand {
                 comfData.accelerometerY = event.getAccelerationY();
                 comfData.accelerometerZ = event.getAccelerationZ();
 
-                sensorUpdateCallback.update(comfData);
+                sensorUpdateCallback.update(comfData, ACCELEROMETER_SENSOR);
             }
         }
     };
@@ -253,7 +278,16 @@ public class SmartBand {
 
 
     public void activate(Activity activity){
-        type = RUN_IN_FOREGROUND;
+        serviceType = RUN_IN_FOREGROUND;
+        this.activity = activity;
+        final WeakReference<Activity> reference = new WeakReference<>(activity);
+        new HeartRateConsentTask().execute(reference);
+        new HeartRateSubscriptionTask().execute();
+    }
+
+
+    public void activateForSampling(Activity activity){
+        serviceType = RUN_FOR_SAMPLING;
         this.activity = activity;
         final WeakReference<Activity> reference = new WeakReference<>(activity);
         new HeartRateConsentTask().execute(reference);
@@ -261,7 +295,7 @@ public class SmartBand {
     }
 
     public void activateInBackground(Context context){
-        type = RUN_IN_BACKGROUND;
+        serviceType = RUN_IN_BACKGROUND;
         this.context = context;
         new HeartRateSubscriptionTask().execute();
     }
@@ -306,7 +340,7 @@ public class SmartBand {
                         isWarning = true;
                     }
 
-                    client.getSensorManager().registerAccelerometerEventListener(mAccelerometerEventListener, SampleRate.MS128);
+                    client.getSensorManager().registerAccelerometerEventListener(mAccelerometerEventListener, SERVICE_SAMPLE_RATE);
 
                     int hardwareVersion = Integer.parseInt(client.getHardwareVersion().await());
                     if (hardwareVersion >= 20) {
@@ -319,7 +353,7 @@ public class SmartBand {
                         client.getSensorManager().registerDistanceEventListener(mBandDistanceEventListener);
                         client.getSensorManager().registerAltimeterEventListener(mBandAltimeterEventListener);
                         client.getSensorManager().registerContactEventListener(mBandContactEventListener);
-                        client.getSensorManager().registerGyroscopeEventListener(mBandGyroscopeEventListener, SampleRate.MS128);
+                        client.getSensorManager().registerGyroscopeEventListener(mBandGyroscopeEventListener, SERVICE_SAMPLE_RATE);
                         client.getSensorManager().registerPedometerEventListener(mBandPedometerEventListener);
                         client.getSensorManager().registerRRIntervalEventListener(mBandRRIntervalEventListener);
 
@@ -421,9 +455,9 @@ public class SmartBand {
      */
 
     private Context getBaseContext(){
-        if (type == RUN_IN_FOREGROUND){
+        if (serviceType == RUN_IN_FOREGROUND || serviceType == RUN_FOR_SAMPLING){
             return  activity;
-        } else if (type == RUN_IN_BACKGROUND){
+        } else if (serviceType == RUN_IN_BACKGROUND){
             return context;
         }
 
