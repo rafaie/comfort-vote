@@ -77,11 +77,11 @@ public class DataSamplingFragment extends DialogFragment{
             @Override
             public void onClick(View v) {
                 if (sampleingStatus == STATUS_STOP){
-                    ((Button) v.findViewById(R.id.btn_sample)).setText("Start");
+                    ((Button) v.findViewById(R.id.btn_sample)).setText("Stop");
                     smartBand.activateForSampling(getActivity());
                     sampleingStatus = STATUS_RUN;
                 } else if (sampleingStatus == STATUS_RUN){
-                    ((Button) v.findViewById(R.id.btn_sample)).setText("Stop");
+                    ((Button) v.findViewById(R.id.btn_sample)).setText("Start");
                     smartBand.pause();
                     sampleingStatus = STATUS_STOP;
                 }
