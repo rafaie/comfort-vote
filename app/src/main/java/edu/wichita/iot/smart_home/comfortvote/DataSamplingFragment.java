@@ -134,6 +134,13 @@ public class DataSamplingFragment extends DialogFragment{
             }
         });
 
+        ((Button) v.findViewById(R.id.btn_sample_share)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareDB();
+            }
+        });
+
 
     }
 
@@ -187,6 +194,45 @@ public class DataSamplingFragment extends DialogFragment{
                 // Nothing
             }
         }).create().show();
+    }
+
+
+    public void shareDB(){
+        try {
+
+            Dao<SensorSampleData, Integer> dao = getDBHelper().getSendorSampleDataDao();
+            List<SensorSampleData> sensorSampleDataList = dao.queryForAll();
+
+            String h = DateFormat.format("yyyyy_mm_dd_hhmmssaa", System.currentTimeMillis()).toString();
+
+            String baseFolder = "";
+            // check if external storage is available
+            if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                baseFolder = getActivity().getExternalFilesDir(null).getAbsolutePath();
+            }
+            // revert to using internal storage
+            else {
+                baseFolder = getActivity().getFilesDir().getAbsolutePath();
+            }
+            File rootFile = new File(baseFolder + "sansor_sample_data_"+ h +".csv");
+            FileOutputStream fileOutputStream = new FileOutputStream (rootFile);
+
+            if (sensorSampleDataList.size() > 0){
+                fileOutputStream.write(sensorSampleDataList.get(0).getCsvFormatHeader().getBytes());
+                for (SensorSampleData sensorSampleData : sensorSampleDataList){
+                    fileOutputStream.write(sensorSampleData.getCsvFormat().getBytes());
+                }
+                fileOutputStream.close();
+
+                MainActivityFragment.getInstance().shareFile(rootFile);
+            } else {
+                MainActivityFragment.getInstance().showDialog("There is No data in DB!");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
 }
