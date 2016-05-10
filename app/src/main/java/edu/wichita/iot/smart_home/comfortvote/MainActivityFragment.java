@@ -294,11 +294,11 @@ public class MainActivityFragment extends Fragment {
         dao.create(comfData);
     }
 
-    public void shareDB() throws SQLException{
-        Dao<ComfData, Integer> dao = getDBHelper().getComfDataDao();
-        List<ComfData> comfDataList = dao.queryForAll();
-
+    public void shareDB(){
         try {
+
+            Dao<ComfData, Integer> dao = getDBHelper().getComfDataDao();
+            List<ComfData> comfDataList = dao.queryForAll();
 
             String h = DateFormat.format("yyyyy_mm_dd_hhmmssaa", System.currentTimeMillis()).toString();
 
@@ -328,10 +328,12 @@ public class MainActivityFragment extends Fragment {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (SQLException e){
+            e.printStackTrace();
         }
     }
 
-    private void shareFile(File file1){
+    public void shareFile(File file1){
         Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
         emailIntent.setType("*/*");
 //        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[] {"me@gmail.com"});
