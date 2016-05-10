@@ -370,7 +370,7 @@ public class MainActivityFragment extends Fragment {
     }
 
 
-    private void showDialog(String msgStr){
+    public void showDialog(String msgStr){
         new AlertDialog.Builder(getActivity())
                 .setTitle("Alert")
                 .setMessage(msgStr)
