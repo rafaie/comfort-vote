@@ -127,6 +127,14 @@ public class DataSamplingFragment extends DialogFragment{
             }
         });
 
+        ((Button) v.findViewById(R.id.btn_sample_clear)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearDB();
+            }
+        });
+
+
     }
 
     @Override
@@ -134,19 +142,6 @@ public class DataSamplingFragment extends DialogFragment{
         mTimer.cancel();
         smartBand.pause();
         super.onDismiss(dialog);
-    }
-
-    private void showDialog(String msgStr){
-        new AlertDialog.Builder(getActivity())
-                .setTitle("Alert")
-                .setMessage(msgStr)
-                .setCancelable(false)
-                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Whatever...
-                    }
-                }).create().show();
     }
 
     private DatabaseHelper getDBHelper() {
@@ -168,6 +163,30 @@ public class DataSamplingFragment extends DialogFragment{
         } catch (SQLException e){
             System.out.print(e);
         }
+    }
+
+
+    public void clearDB(){
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Alert")
+                .setMessage("Do you want to Clear the Sampling Sensor Table ?")
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            getDBHelper().clearSensorSampleDataTable();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Nothing
+            }
+        }).create().show();
     }
 
 }

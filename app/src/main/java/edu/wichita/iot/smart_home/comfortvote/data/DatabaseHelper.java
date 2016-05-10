@@ -150,9 +150,18 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 	}
 
-    public void clearDB( ) throws SQLException{
-        TableUtils.clearTable(connectionSource, ComfData.class);
-    }
+	public void clearComfDaoTable( ) throws SQLException{
+		TableUtils.clearTable(connectionSource, ComfData.class);
+	}
+
+	public void clearSensorDataTable( ) throws SQLException{
+		TableUtils.clearTable(connectionSource, SensorData.class);
+	}
+
+	public void clearSensorSampleDataTable( ) throws SQLException{
+		TableUtils.clearTable(connectionSource, SensorSampleData.class);
+	}
+
 
 	public List<SensorData> getLasSensorData(int number){
 		List<SensorData> list=null;

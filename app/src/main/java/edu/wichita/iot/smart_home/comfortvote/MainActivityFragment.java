@@ -356,7 +356,7 @@ public class MainActivityFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            getDBHelper().clearDB();
+                            getDBHelper().clearComfDaoTable();
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
