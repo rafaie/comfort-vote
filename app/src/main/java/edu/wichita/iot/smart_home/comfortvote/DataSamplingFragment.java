@@ -2,8 +2,10 @@ package edu.wichita.iot.smart_home.comfortvote;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +15,11 @@ import android.widget.TextView;
 
 import com.j256.ormlite.dao.Dao;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import edu.wichita.iot.smart_home.comfortvote.callback.AppendToLogCallback;
 import edu.wichita.iot.smart_home.comfortvote.callback.SensorUpdateCallback;
@@ -27,7 +33,7 @@ import edu.wichita.iot.smart_home.comfortvote.data.SensorSampleData;
  */
 public class DataSamplingFragment extends DialogFragment{
 
-    private static final int STATUS_STOP = 1;
+    private static final int STATUS_STOP = 0;
     private static final int STATUS_RUN = 1;
 
     private int sampleingStatus = STATUS_STOP;
@@ -71,13 +77,23 @@ public class DataSamplingFragment extends DialogFragment{
             @Override
             public void onClick(View v) {
                 if (sampleingStatus == STATUS_STOP){
-
+                    ((Button) v.findViewById(R.id.btn_sample)).setText("Start");
+                    smartBand.activateForSampling(getActivity());
+                    sampleingStatus = STATUS_RUN;
                 } else if (sampleingStatus == STATUS_RUN){
-
+                    ((Button) v.findViewById(R.id.btn_sample)).setText("Stop");
+                    smartBand.pause();
+                    sampleingStatus = STATUS_STOP;
                 }
             }
         });
 
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        smartBand.pause();
+        super.onDismiss(dialog);
     }
 
     private void showDialog(String msgStr){
@@ -113,4 +129,5 @@ public class DataSamplingFragment extends DialogFragment{
             System.out.print(e);
         }
     }
+
 }
