@@ -135,6 +135,13 @@ public class DataSamplingFragment extends DialogFragment{
             }
         });
 
+        ((Button) v.findViewById(R.id.btn_sample_share)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareDB();
+            }
+        });
+
 
     }
 
