@@ -27,7 +27,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 	// the DAO object we use to access the ComfData table
     private Dao<ComfData, Integer> comfDao = null;
-    private Dao<SensorData, Integer> sensorDao = null;
+	private Dao<SensorData, Integer> sensorDao = null;
+	private Dao<SensorSampleData, Integer> sensorSampleDao = null;
     private Dao<SettingData, Integer> settingDao = null;
 	private static final AtomicInteger usageCounter = new AtomicInteger(0);
 
@@ -59,7 +60,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		try {
 			Log.i(DatabaseHelper.class.getName(), "onCreate");
             TableUtils.createTable(connectionSource, ComfData.class);
-            TableUtils.createTable(connectionSource, SensorData.class);
+			TableUtils.createTable(connectionSource, SensorData.class);
+			TableUtils.createTable(connectionSource, SensorSampleData.class);
             TableUtils.createTable(connectionSource, SettingData.class);
 
 		} catch (SQLException e) {
@@ -96,15 +98,23 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return comfDao;
     }
 
-    public Dao<SensorData, Integer> getSendorDataDao() throws SQLException {
-        if (sensorDao == null) {
-            sensorDao = getDao(SensorData.class);
-        }
-        return sensorDao;
-    }
+	public Dao<SensorData, Integer> getSendorDataDao() throws SQLException {
+		if (sensorDao == null) {
+			sensorDao = getDao(SensorData.class);
+		}
+		return sensorDao;
+	}
 
 
-    public Dao<SettingData, Integer> getSettingDataDao() throws SQLException {
+	public Dao<SensorSampleData, Integer> getSendorSampleDataDao() throws SQLException {
+		if (sensorSampleDao == null) {
+			sensorSampleDao = getDao(SensorSampleData.class);
+		}
+		return sensorSampleDao;
+	}
+
+
+	public Dao<SettingData, Integer> getSettingDataDao() throws SQLException {
         if (settingDao == null) {
             settingDao = getDao(SettingData.class);
         }
@@ -131,6 +141,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 		TableUtils.dropTable(connectionSource,  SensorData.class, true);
 		TableUtils.createTable(connectionSource,  SensorData.class);
+
+		TableUtils.dropTable(connectionSource,  SensorSampleData.class, true);
+		TableUtils.createTable(connectionSource,  SensorSampleData.class);
 
 		TableUtils.dropTable(connectionSource,  SettingData.class, true);
 		TableUtils.createTable(connectionSource,  SettingData.class);
