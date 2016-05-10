@@ -131,7 +131,7 @@ public class DataSamplingFragment extends DialogFragment{
 
     @Override
     public void onDismiss(DialogInterface dialog) {
-
+        mTimer.cancel();
         smartBand.pause();
         super.onDismiss(dialog);
     }
