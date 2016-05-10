@@ -78,7 +78,8 @@ public class SmartBand {
     private static final int RUN_FOR_SAMPLING  = 3;
 
     // Sample Rate Configuration
-    private final SampleRate SERVICE_SAMPLE_RATE = SampleRate.MS16;
+    private final SampleRate DEFAULT_SAMPLE_RATE = SampleRate.MS128;
+    private final SampleRate SAMPLING_SAMPLE_RATE = SampleRate.MS16;
 
     private ComfData comfData;
 
@@ -340,7 +341,11 @@ public class SmartBand {
                         isWarning = true;
                     }
 
-                    client.getSensorManager().registerAccelerometerEventListener(mAccelerometerEventListener, SERVICE_SAMPLE_RATE);
+                    if (serviceType == RUN_FOR_SAMPLING){
+                        client.getSensorManager().registerAccelerometerEventListener(mAccelerometerEventListener, SAMPLING_SAMPLE_RATE);
+                    } else {
+                        client.getSensorManager().registerAccelerometerEventListener(mAccelerometerEventListener, DEFAULT_SAMPLE_RATE);
+                    }
 
                     int hardwareVersion = Integer.parseInt(client.getHardwareVersion().await());
                     if (hardwareVersion >= 20) {
@@ -353,7 +358,11 @@ public class SmartBand {
                         client.getSensorManager().registerDistanceEventListener(mBandDistanceEventListener);
                         client.getSensorManager().registerAltimeterEventListener(mBandAltimeterEventListener);
                         client.getSensorManager().registerContactEventListener(mBandContactEventListener);
-                        client.getSensorManager().registerGyroscopeEventListener(mBandGyroscopeEventListener, SERVICE_SAMPLE_RATE);
+                        if (serviceType == RUN_FOR_SAMPLING){
+                            client.getSensorManager().registerGyroscopeEventListener(mBandGyroscopeEventListener, SAMPLING_SAMPLE_RATE);
+                        } else {
+                            client.getSensorManager().registerGyroscopeEventListener(mBandGyroscopeEventListener, DEFAULT_SAMPLE_RATE);
+                        }
                         client.getSensorManager().registerPedometerEventListener(mBandPedometerEventListener);
                         client.getSensorManager().registerRRIntervalEventListener(mBandRRIntervalEventListener);
 
