@@ -34,7 +34,7 @@ public class ComfService extends Service {
     private DatabaseHelper databaseHelper = null;
 
     // constant
-    public static final long NOTIFY_INTERVAL = 1000 * 300; // 300 seconds
+    public static final long NOTIFY_INTERVAL = 1000 * 900; // 900 seconds
 
     // run on another Thread to avoid crash
     private Handler mHandler = new Handler();
