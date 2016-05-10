@@ -76,6 +76,7 @@ import edu.wichita.iot.smart_home.comfortvote.callback.AppendToLogCallback;
 import edu.wichita.iot.smart_home.comfortvote.callback.SensorUpdateCallback;
 import edu.wichita.iot.smart_home.comfortvote.data.ComfData;
 import edu.wichita.iot.smart_home.comfortvote.data.DatabaseHelper;
+import edu.wichita.iot.smart_home.comfortvote.data.SensorData;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -203,11 +204,9 @@ public class MainActivityFragment extends Fragment {
 
                 ((TextView) getActivity().findViewById(R.id.calories_today)).setText(
                         String.format(" %d ", comfData.caloriesToday));
-                ((TextView) getActivity().findViewById(R.id.calories_in_sec)).setText(
-                        String.format(" %d ", comfData.caloriesInSec));
 
                 ((TextView) getActivity().findViewById(R.id.skin_temperature)).setText(
-                        String.format(" %.2f degrees Celsius", comfData.skinTempreture));
+                        String.format(" %.2f degrees Celsius", comfData.skinTemperature));
 
                 String uVInfoStr = String.format( "VV Exposure Today = %d\n uVIndexLevel = %s",
                         comfData.uVExposureToday, comfData.uVIndexLevel);
@@ -251,56 +250,47 @@ public class MainActivityFragment extends Fragment {
     }
 
     public void storeData(int vote, float roomTempreture, float roomHumidity) throws SQLException {
-//        Use it for recreation
-//        getDBHelper().reCreateDB();
         Dao<ComfData, Integer> dao = getDBHelper().getComfDataDao();
 
         String currentTime = DateFormat.format("MM/dd/yyyy HH:mm:ss", System.currentTimeMillis()).toString();
 
         final ComfData deviceComfData = smartBand.getComfData();
-        ComfData comfData = new ComfData();
+        ComfData comfData = new ComfData(deviceComfData);
         comfData.currentTime = currentTime;
-        comfData.heartRateQuality = deviceComfData.heartRateQuality;
-        comfData.heartRate = deviceComfData.heartRate;
-        comfData.accelerometerX = deviceComfData.accelerometerX;
-        comfData.accelerometerY = deviceComfData.accelerometerY;
-        comfData.accelerometerZ = deviceComfData.accelerometerZ;
-        comfData.accelerometerX2 = deviceComfData.accelerometerX2;
-        comfData.accelerometerY2 = deviceComfData.accelerometerY2;
-        comfData.accelerometerZ2 = deviceComfData.accelerometerZ2;
-        comfData.angAccelerometerX = deviceComfData.angAccelerometerX;
-        comfData.angAccelerometerY = deviceComfData.angAccelerometerY;
-        comfData.angAccelerometerZ = deviceComfData.angAccelerometerZ;
-        comfData.brightnessVal = deviceComfData.brightnessVal;
-        comfData.airPressure = deviceComfData.airPressure;
-        comfData.temperature = deviceComfData.temperature;
-        comfData.resistance = deviceComfData.resistance;
-        comfData.caloriesToday = deviceComfData.caloriesToday;
-        comfData.caloriesInSec = deviceComfData.caloriesInSec;
-        comfData.caloriesTS = deviceComfData.caloriesTS;
-        comfData.skinTempreture = deviceComfData.skinTempreture;
-        comfData.uVExposureToday = deviceComfData.uVExposureToday;
-        comfData.uVIndexLevel = deviceComfData.uVIndexLevel;
-        comfData.motionType = deviceComfData.motionType;
-        comfData.distance = deviceComfData.distance;
-        comfData.pace = deviceComfData.pace;
-        comfData.speed = deviceComfData.speed;
-        comfData.totalLoss = deviceComfData.totalLoss;
-        comfData.totalGain = deviceComfData.totalGain;
-        comfData.steppingGain = deviceComfData.steppingGain;
-        comfData.steppingLoss = deviceComfData.steppingLoss;
-        comfData.steppingAscended = deviceComfData.steppingAscended;
-        comfData.steppingDescended = deviceComfData.steppingDescended;
-        comfData.rate = deviceComfData.rate;
-        comfData.flightsStairsAscended = deviceComfData.flightsStairsAscended;
-        comfData.flightsStairsDescended = deviceComfData.flightsStairsDescended;
-        comfData.bandContactState = deviceComfData.bandContactState;
-        comfData.pedometer = deviceComfData.pedometer;
-        comfData.rrInterval = deviceComfData.rrInterval;
-        comfData.statusStr = deviceComfData.statusStr;
         comfData.vote = vote;
         comfData.roomTempreture = roomTempreture;
         comfData.roomHumidity = roomHumidity;
+
+        List<SensorData> sensorDatas = getDBHelper().getLasSensorData(2);
+        if (sensorDatas.size() >= 2){
+            comfData.caloriesToday2 = sensorDatas.get(0).caloriesToday;
+            comfData.caloriesTS2 = sensorDatas.get(0).caloriesTS;
+            comfData.pedometer2 = sensorDatas.get(0).pedometer;
+            comfData.pedometerTS2 = sensorDatas.get(0).pedometerTS;
+            comfData.caloriesToday3 = sensorDatas.get(1).caloriesToday;
+            comfData.caloriesTS3 = sensorDatas.get(1).caloriesTS;
+            comfData.pedometer3 = sensorDatas.get(1).pedometer;
+            comfData.pedometerTS3 = sensorDatas.get(1).pedometerTS;
+        } else if (sensorDatas.size() == 1) {
+            comfData.caloriesToday2 = sensorDatas.get(0).caloriesToday;
+            comfData.caloriesTS2 = sensorDatas.get(0).caloriesTS;
+            comfData.pedometer2 = sensorDatas.get(0).pedometer;
+            comfData.pedometerTS2 = sensorDatas.get(0).pedometerTS;
+            comfData.caloriesToday3 =0;
+            comfData.caloriesTS3 = 0;
+            comfData.pedometer3 = 0;
+            comfData.pedometerTS3 = 0;
+        } else{
+            comfData.caloriesToday2 = 0;
+            comfData.caloriesTS2 = 0;
+            comfData.pedometer2 = 0;
+            comfData.pedometerTS2 = 0;
+            comfData.caloriesToday3 = 0;
+            comfData.caloriesTS3 = 0;
+            comfData.pedometer3 = 0;
+            comfData.pedometerTS3 = 0;
+        }
+
         dao.create(comfData);
     }
 
