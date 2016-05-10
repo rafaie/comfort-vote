@@ -55,12 +55,8 @@ public class MainActivity extends AppCompatActivity {
         ((FloatingActionButton) findViewById(R.id.share_data)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    floatingActionsMenu.collapse();
-                    MainActivityFragment.getInstance().shareDB();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                floatingActionsMenu.collapse();
+                MainActivityFragment.getInstance().shareDB();
             }
         });
 
