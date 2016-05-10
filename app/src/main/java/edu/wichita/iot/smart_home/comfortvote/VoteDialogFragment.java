@@ -45,6 +45,8 @@ public class VoteDialogFragment extends DialogFragment{
             }
         };
 
+        ((Button) v.findViewById(R.id.btn_0)).setOnClickListener(onClickListener);
+
         ((Button) v.findViewById(R.id.btn_1)).setOnClickListener(onClickListener);
         ((Button) v.findViewById(R.id.btn_2)).setOnClickListener(onClickListener);
         ((Button) v.findViewById(R.id.btn_3)).setOnClickListener(onClickListener);
