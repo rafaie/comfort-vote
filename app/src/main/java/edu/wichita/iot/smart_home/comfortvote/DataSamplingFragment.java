@@ -89,7 +89,6 @@ public class DataSamplingFragment extends DialogFragment{
 
         // schedule task
         mTimer.scheduleAtFixedRate(new TimeDisplayTimerTask(), 0, DB_INFO_PRESENTATION_INTERVAL);
-
         return rootView;
     }
 
@@ -119,10 +118,12 @@ public class DataSamplingFragment extends DialogFragment{
                     ((Button) v.findViewById(R.id.btn_sample)).setText("Stop");
                     smartBand.activateForSampling(getActivity());
                     sampleingStatus = STATUS_RUN;
+                    getDialog().setCanceledOnTouchOutside(false);
                 } else if (sampleingStatus == STATUS_RUN){
                     ((Button) v.findViewById(R.id.btn_sample)).setText("Start");
                     smartBand.pause();
                     sampleingStatus = STATUS_STOP;
+                    getDialog().setCanceledOnTouchOutside(true);
                 }
             }
         });
@@ -131,13 +132,6 @@ public class DataSamplingFragment extends DialogFragment{
             @Override
             public void onClick(View v) {
                 clearDB();
-            }
-        });
-
-        ((Button) v.findViewById(R.id.btn_sample_share)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                shareDB();
             }
         });
 
