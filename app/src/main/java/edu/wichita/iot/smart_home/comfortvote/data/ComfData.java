@@ -177,6 +177,10 @@ public class ComfData {
     @DatabaseField
     public String clothing;
 
+    public ComfData(){
+
+    }
+
 
     public ComfData(ComfData comfData){
 
