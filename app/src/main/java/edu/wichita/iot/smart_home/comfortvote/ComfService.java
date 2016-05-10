@@ -63,8 +63,8 @@ public class ComfService extends Service {
 
         smartBand = new SmartBand(new SensorUpdateCallback() {
             @Override
-            public void update(ComfData comfData) {
-                saveSampple(comfData);
+            public void update(ComfData comfData, int sensorType) {
+                saveSampple(comfData, sensorType);
             }
         }, new AppendToLogCallback() {
             @Override
@@ -102,7 +102,7 @@ public class ComfService extends Service {
         smartBand.activateInBackground(this.getBaseContext());
     }
 
-    private void saveSampple(ComfData comfData) {
+    private void saveSampple(ComfData comfData, int sensorType) {
 
         if (System.currentTimeMillis() - activeTime > SENSOR_WAIT_TIME) {
             if (System.currentTimeMillis() - storeTime > SENSOR_WAIT_TIME) {
@@ -115,9 +115,6 @@ public class ComfService extends Service {
         }
     }
 
-    /**
-     * You'll need this in your class to get the helper from the manager once per class.
-     */
     private DatabaseHelper getDBHelper() {
         if (databaseHelper == null) {
             databaseHelper = DatabaseHelper.getHelper(getBaseContext());

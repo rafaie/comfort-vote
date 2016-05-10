@@ -104,8 +104,8 @@ public class MainActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
         smartBand = new SmartBand(new SensorUpdateCallback() {
             @Override
-            public void update(ComfData comfData) {
-                updateSensorInfo(comfData);
+            public void update(ComfData comfData, int sensorType) {
+                updateSensorInfo(comfData, sensorType);
             }
         }, new AppendToLogCallback() {
             @Override
@@ -170,7 +170,7 @@ public class MainActivityFragment extends Fragment {
     }
 
 
-    private void updateSensorInfo(final ComfData comfData) {
+    private void updateSensorInfo(final ComfData comfData, int sensorType) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
