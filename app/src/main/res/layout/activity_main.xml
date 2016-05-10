@@ -75,6 +75,15 @@
                 fab:fab_colorPressed="@color/white_pressed"/>
 
             <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/data_sampling"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="@color/white"
+                fab:fab_title="Continues Sampling"
+                fab:fab_icon="@android:drawable/ic_menu_save"
+                fab:fab_colorPressed="@color/white_pressed"/>
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/clear_db"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

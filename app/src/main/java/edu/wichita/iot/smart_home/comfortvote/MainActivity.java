@@ -56,11 +56,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                floatingActionsMenu.collapse();
+                    floatingActionsMenu.collapse();
                     MainActivityFragment.getInstance().shareDB();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        ((FloatingActionButton) findViewById(R.id.data_sampling)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    floatingActionsMenu.collapse();
+                    showSamplingdata();
             }
         });
 
@@ -90,6 +98,20 @@ public class MainActivity extends AppCompatActivity {
         DialogFragment voteDialogFragment = new VoteDialogFragment();
         voteDialogFragment.show(ft, "dialog");
     }
+
+    public void showSamplingdata(){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragment dataSamplingFragment = new DataSamplingFragment();
+        dataSamplingFragment.show(ft, "dialog");
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
