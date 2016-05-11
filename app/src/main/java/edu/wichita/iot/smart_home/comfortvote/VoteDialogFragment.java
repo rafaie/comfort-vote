@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -122,15 +123,17 @@ public class VoteDialogFragment extends DialogFragment{
 
 
     private void showColthingDialog(){
-        String names[] ={"A","B","C","D"};
+        String names[] ={"A","B","C","D","A","B","C","D","A","B","C","D","A","B","C","D","A","B","C","D","A","B","C","D"};
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View convertView = (View) inflater.inflate(R.layout.alert_dialog_clothing, null);
 
         alertDialog.setView(convertView);
-        ListView lv = (ListView) convertView.findViewById(R.id.clothing_list);
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.simple_list_item_1,names);
-//        lv.setAdapter(adapter);
+        ListView listView = (ListView) convertView.findViewById(R.id.clothing_list);
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice , names);
+        listView.setAdapter(adapter);
         alertDialog.show();
     }
 }
