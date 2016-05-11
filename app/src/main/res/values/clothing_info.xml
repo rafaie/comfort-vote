@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="clothing">
+
+        <item >T-shirt</item>
+        <item >Half-slip</item>
+        <item >Long underwear bottoms</item>
+        <item >Full slip</item>
+        <item >Long underwear top</item>
+        <item >Ankle-length athletic socks</item>
+        <item >Pantyhose/stockings</item>
+        <item >Sandals/thongs</item>
+        <item >Shoes</item>
+        <item >Slippers (quilted,  pile lined)</item>
+        <item >Calf-length socks</item>
+        <item >Knee socks (thick)</item>
+        <item >Boots</item>
+        <item >Sleeveless/scoop-neck blouse</item>
+        <item >Short-sleeve knit sport shirt</item>
+        <item >Short-sleeve dress shirt</item>
+        <item >Long-sleeve dress shirt</item>
+        <item >Long-sleeve flannel shirt</item>
+        <item >Long-sleeve sweatshirt</item>
+        <item >Short shorts</item>
+        <item >Walking shorts</item>
+        <item >Straight trousers (thin)</item>
+        <item >Straight trousers (thick)</item>
+        <item >Sweatpants</item>
+        <item >Overalls</item>
+        <item >Coveralls</item>
+        <item >Skirt (thin)</item>
+        <item >Skirt (thick)</item>
+        <item >Sleeveless, scoop neck (thin)</item>
+        <item >Sleeveless, scoop neck (thick), jumper</item>
+        <item >Short-sleeve shirtdress (thin)</item>
+        <item >Long-sleeve shirtdress (thin)</item>
+        <item >Long-sleeve shirtdress (thick)</item>
+        <item >Sleeveless vest (thin)</item>
+        <item >Sleeveless vest (thick)</item>
+        <item >Long-sleeve (thin)</item>
+        <item >Long-sleeve (thick)</item>
+        <item >Sleeveless vest (thin)</item>
+        <item >Sleeveless vest (thick)</item>
+        <item >Single-breasted (thin)</item>
+        <item >Single-breasted (thick)</item>
+        <item >Double-breasted (thin)</item>
+        <item >Double-breasted (thick)</item>
+        <item >Sleeveless short gown (thin)</item>
+        <item >Sleeveless long gown (thin)</item>
+        <item >Short-sleeve hospital gown</item>
+        <item >Short-sleeve short robe (thin)</item>
+        <item >Short-sleeve pajamas (thin)</item>
+        <item >Long-sleeve long gown (thick)</item>
+        <item >Long-sleeve short wrap robe (thick)</item>
+        <item >Long-sleeve pajamas (thick)</item>
+        <item >Long-sleeve long wrap robe (thick)</item>
+        <item >Bra</item>
+        <item >Panties</item>
+        <item >Men\'s briefs</item>
+    </string-array>
+
+    <string-array name="clothing_value">
+        <item >0.08</item>
+        <item >0.14</item>
+        <item >0.15</item>
+        <item >0.16</item>
+        <item >0.2</item>
+        <item >0.02</item>
+        <item >0.02</item>
+        <item >0.02</item>
+        <item >0.02</item>
+        <item >0.03</item>
+        <item >0.03</item>
+        <item >0.06</item>
+        <item >0.1</item>
+        <item >0.12</item>
+        <item >0.17</item>
+        <item >0.19</item>
+        <item >0.25</item>
+        <item >0.34</item>
+        <item >0.34</item>
+        <item >0.06</item>
+        <item >0.08</item>
+        <item >0.15</item>
+        <item >0.24</item>
+        <item >0.28</item>
+        <item >0.3</item>
+        <item >0.49</item>
+        <item >0.14</item>
+        <item >0.23</item>
+        <item >0.23</item>
+        <item >0.27</item>
+        <item >0.29</item>
+        <item >0.33</item>
+        <item >0.47</item>
+        <item >0.13</item>
+        <item >0.22</item>
+        <item >0.25</item>
+        <item >0.36</item>
+        <item >0.1</item>
+        <item >0.17</item>
+        <item >0.36</item>
+        <item >0.44</item>
+        <item >0.42</item>
+        <item >0.48</item>
+        <item >0.18</item>
+        <item >0.2</item>
+        <item >0.31</item>
+        <item >0.34</item>
+        <item >0.42</item>
+        <item >0.46</item>
+        <item >0.48</item>
+        <item >0.57</item>
+        <item >0.69</item>
+        <item >0.01</item>
+        <item >0.03</item>
+        <item >0.04</item>
+    </string-array>
+</resources>
