@@ -7,8 +7,10 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -95,6 +97,14 @@ public class VoteDialogFragment extends DialogFragment{
                 }
             }
         });
+
+        ((Button) v.findViewById(R.id.clothing_update_btn)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showColthingDialog();
+            }
+        });
+
     }
 
     private void showDialog(String msgStr){
@@ -108,5 +118,19 @@ public class VoteDialogFragment extends DialogFragment{
                         // Whatever...
                     }
                 }).create().show();
+    }
+
+
+    private void showColthingDialog(){
+        String names[] ={"A","B","C","D"};
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View convertView = (View) inflater.inflate(R.layout.alert_dialog_clothing, null);
+
+        alertDialog.setView(convertView);
+        ListView lv = (ListView) convertView.findViewById(R.id.clothing_list);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.simple_list_item_1,names);
+//        lv.setAdapter(adapter);
+        alertDialog.show();
     }
 }
