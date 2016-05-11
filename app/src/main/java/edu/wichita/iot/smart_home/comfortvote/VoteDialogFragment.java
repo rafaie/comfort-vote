@@ -56,7 +56,7 @@ public class VoteDialogFragment extends DialogFragment{
 
 
     private void updateClothingBasedOnLatestVote(){
-        List<ComfData> comfDatas = MainActivityFragment.getInstance().getDBHelper().getLasComfData(1);
+        List<ComfData> comfDatas = MainActivityFragment.getInstance().getDBHelper().getLasComfDataVote(1);
         if (comfDatas.size() > 0){
             clothingValue = comfDatas.get(0).clothingScore;
             clothingTxt = comfDatas.get(0).clothing;

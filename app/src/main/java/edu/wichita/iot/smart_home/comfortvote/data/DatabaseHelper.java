@@ -11,6 +11,7 @@ import android.util.Log;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -180,6 +181,21 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		List<ComfData> list=null;
 		try {
 			QueryBuilder<ComfData, Integer> builder = getComfDataDao().queryBuilder();
+			builder.limit(number);
+			builder.orderBy("id", false);  // true for ascending, false for descending
+			list = getComfDataDao().query(builder.prepare());  // returns list of ten items
+		} catch (SQLException e){
+			System.out.println(e);
+		}
+		return list;
+	}
+
+	public List<ComfData> getLasComfDataVote(int number){
+		List<ComfData> list=null;
+		try {
+			QueryBuilder<ComfData, Integer> builder = getComfDataDao().queryBuilder();
+			Where<ComfData, Integer> where = builder.where();
+			where.eq("dataType", "1");
 			builder.limit(number);
 			builder.orderBy("id", false);  // true for ascending, false for descending
 			list = getComfDataDao().query(builder.prepare());  // returns list of ten items
