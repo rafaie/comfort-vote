@@ -17,7 +17,10 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.sql.Array;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
 import edu.wichita.iot.smart_home.comfortvote.R;
 
@@ -28,13 +31,18 @@ public class VoteDialogFragment extends DialogFragment{
     private AlertDialog alertDialog = null;
 
     private TextView myVoteTextView;
+    private TextView myClothingTextView;
     private View rootView;
+    private String clothingTxt = "";
+    private String clothingId = "";
+    private float clothingValue = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_dialog_vote, container, false);
         myVoteTextView = (TextView) rootView.findViewById(R.id.my_vote);
+        myClothingTextView = (TextView) rootView.findViewById(R.id.clothing_score);
         configureButtons(rootView);
 
 
@@ -91,7 +99,6 @@ public class VoteDialogFragment extends DialogFragment{
                         MainActivityFragment.getInstance().storeData(vote,room_tempreture, room_humidity);
 
                         dismiss();
-                        // Yes!  An integer.
                     } catch (NumberFormatException nfe) {
                         // Not an integer
                         showDialog("Please update room or tempreture humidity! They are not numeric value!");
@@ -139,6 +146,16 @@ public class VoteDialogFragment extends DialogFragment{
         listView.setAdapter(adapter);
         listView.setItemChecked(2, true);
 
+        String[] checked = clothingTxt.split("\\|");
+        for (int id=0; id < listView.getCount(); id ++){
+            if (Arrays.asList(checked).contains(getResources().getStringArray(R.array.clothing)[id])){
+                listView.setItemChecked(id, true);
+            } else{
+                listView.setItemChecked(id, false);
+            }
+        }
+
+
         clothingView.findViewById(R.id.btn_clothing_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,20 +166,20 @@ public class VoteDialogFragment extends DialogFragment{
         clothingView.findViewById(R.id.btn_clothing_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String clothingTxt = "";
-                String clothingId = "";
 
                 SparseBooleanArray checkedOption = listView.getCheckedItemPositions();
+                clothingTxt = "";
+                clothingId = "";
+                clothingValue = 0;
                 for (int id=0; id < listView.getCount(); id ++){
                     if (checkedOption.get(id)){
-                        clothingTxt += getResources().getStringArray(R.array.clothing)[(int) id] + "|";
-                        clothingId += getResources().getStringArray(R.array.clothing_value)[(int) id] + "|";
+                        clothingTxt += getResources().getStringArray(R.array.clothing)[id] + "|";
+                        clothingId += getResources().getStringArray(R.array.clothing_value)[id] + "|";
+                        clothingValue += Float.valueOf(getResources().getStringArray(R.array.clothing_value)[id]);
                     }
                 }
-//                for (long id :listView.getCheckedItemPositions()){
-//                }
-                showDialog(clothingTxt);
-                showDialog(clothingId);
+
+                myClothingTextView.setText(String.valueOf(clothingValue));
                 alertDialog.dismiss();
             }
         });

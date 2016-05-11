@@ -184,7 +184,7 @@
                 android:id="@+id/clothing_update_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Update"/>
+                android:text="Details"/>
         </LinearLayout>
 
         <LinearLayout
