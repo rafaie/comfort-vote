@@ -34,7 +34,7 @@ public class ComfService extends Service {
     private DatabaseHelper databaseHelper = null;
 
     // constant
-    public static final long NOTIFY_INTERVAL = 1000 * 900; // 900 seconds
+    public static final long NOTIFY_INTERVAL = 1000 * 90; // 900 seconds
 
     // run on another Thread to avoid crash
     private Handler mHandler = new Handler();
@@ -44,7 +44,7 @@ public class ComfService extends Service {
     private SmartBand smartBand;
     private long activeTime = 0;
     private long storeTime = 0;
-    private static final long SENSOR_WAIT_TIME = 20 * 1000;
+    private static final long SENSOR_WAIT_TIME = 15 * 1000;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -125,10 +125,11 @@ public class ComfService extends Service {
 
     private void storeSensorData(ComfData comfData) {
         try{
+            Dao<ComfData, Integer> dao = getDBHelper().getComfDataDao();
+            ComfData comfDataNew = ComfData.newInstance(comfData);
+            comfDataNew.dataType = 10;
+            dao.create(comfDataNew);
 
-            Dao<SensorData, Integer> dao = getDBHelper().getSendorDataDao();
-            SensorData sensorData = SensorData.newInstance(comfData);
-            dao.create(sensorData);
         } catch (SQLException e){
             System.out.print(e);
         }

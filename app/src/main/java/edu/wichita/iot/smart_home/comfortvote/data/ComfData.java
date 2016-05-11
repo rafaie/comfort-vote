@@ -1,5 +1,6 @@
 package edu.wichita.iot.smart_home.comfortvote.data;
 
+import android.os.Bundle;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -177,11 +178,17 @@ public class ComfData {
     @DatabaseField
     public String clothing;
 
+    @DatabaseField
+    public int dataType;
+
     public ComfData(){
 
     }
 
+    public static ComfData newInstance(ComfData comfData) {
 
+        return  new ComfData(comfData);
+    }
     public ComfData(ComfData comfData){
 
         this.heartRateQuality = comfData.heartRateQuality;
@@ -230,10 +237,12 @@ public class ComfData {
         this.pedometerTS3 = comfData.pedometerTS3;
         this.rrInterval = comfData.rrInterval;
         this.statusStr = comfData.statusStr;
+        this.dataType = comfData.dataType;
     }
 
     public String getCsvFormatHeader(){
         return  "currentTime, "+
+                "Data Type, " +
                 "heartRateQuality, " +
                 "heartRate, " +
                 "accelerometerX, " +
@@ -290,6 +299,7 @@ public class ComfData {
 
     public String getCsvFormat(){
         return          String.valueOf(currentTime) + "," +
+                        String.valueOf(dataType) + "," +
                         String.valueOf(heartRateQuality) + "," +
                         String.valueOf(heartRate) + "," +
                         String.valueOf(accelerometerX) + "," +
@@ -338,9 +348,9 @@ public class ComfData {
                         String.valueOf(statusStr) + "," +
                         String.valueOf(vote) + "," +
                         String.valueOf(roomTempreture) + "," +
-                        String.valueOf(roomHumidity) +
-                        String.valueOf(locationType) +
-                        String.valueOf(clothingScore) +
+                        String.valueOf(roomHumidity) + "," +
+                        String.valueOf(locationType) + "," +
+                        String.valueOf(clothingScore) + "," +
                         String.valueOf(clothing) +  "\n" ;
     }
 }
