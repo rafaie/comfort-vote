@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +25,11 @@ import edu.wichita.iot.smart_home.comfortvote.R;
  * Created by Fariba on 4/6/2016.
  */
 public class VoteDialogFragment extends DialogFragment{
-    int mNum;
-    TextView myVoteTextView;
-    View rootView;
+    private AlertDialog alertDialog = null;
+
+    private TextView myVoteTextView;
+    private View rootView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -121,19 +124,49 @@ public class VoteDialogFragment extends DialogFragment{
                 }).create().show();
     }
 
-
     private void showColthingDialog(){
-        String names[] ={"A","B","C","D","A","B","C","D","A","B","C","D","A","B","C","D","A","B","C","D","A","B","C","D"};
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+         alertDialog = new AlertDialog.Builder(getActivity()).create();
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View convertView = (View) inflater.inflate(R.layout.alert_dialog_clothing, null);
+        View clothingView = (View) inflater.inflate(R.layout.alert_dialog_clothing, null);
 
-        alertDialog.setView(convertView);
-        ListView listView = (ListView) convertView.findViewById(R.id.clothing_list);
+        alertDialog.setView(clothingView);
+        final ListView listView = (ListView) clothingView.findViewById(R.id.clothing_list);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice , names);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice ,
+                getResources().getStringArray(R.array.clothing));
+
         listView.setAdapter(adapter);
+        listView.setItemChecked(2, true);
+
+        clothingView.findViewById(R.id.btn_clothing_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+
+        clothingView.findViewById(R.id.btn_clothing_save).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String clothingTxt = "";
+                String clothingId = "";
+
+                SparseBooleanArray checkedOption = listView.getCheckedItemPositions();
+                for (int id=0; id < listView.getCount(); id ++){
+                    if (checkedOption.get(id)){
+                        clothingTxt += getResources().getStringArray(R.array.clothing)[(int) id] + "|";
+                        clothingId += getResources().getStringArray(R.array.clothing_value)[(int) id] + "|";
+                    }
+                }
+//                for (long id :listView.getCheckedItemPositions()){
+//                }
+                showDialog(clothingTxt);
+                showDialog(clothingId);
+                alertDialog.dismiss();
+            }
+        });
+
         alertDialog.show();
     }
 }
