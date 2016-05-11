@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,9 +21,11 @@ import org.w3c.dom.Text;
 import java.sql.Array;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import edu.wichita.iot.smart_home.comfortvote.R;
+import edu.wichita.iot.smart_home.comfortvote.data.ComfData;
 
 /**
  * Created by Fariba on 4/6/2016.
@@ -32,6 +35,7 @@ public class VoteDialogFragment extends DialogFragment{
 
     private TextView myVoteTextView;
     private TextView myClothingTextView;
+    private CheckBox inBuildingChk;
     private View rootView;
     private String clothingTxt = "";
     private String clothingId = "";
@@ -43,12 +47,23 @@ public class VoteDialogFragment extends DialogFragment{
         rootView = inflater.inflate(R.layout.fragment_dialog_vote, container, false);
         myVoteTextView = (TextView) rootView.findViewById(R.id.my_vote);
         myClothingTextView = (TextView) rootView.findViewById(R.id.clothing_score);
+        inBuildingChk = (CheckBox) rootView.findViewById(R.id.chk_in_building);
         configureButtons(rootView);
 
-
+        updateClothingBasedOnLatestVote();
         return rootView;
     }
 
+
+    private void updateClothingBasedOnLatestVote(){
+        List<ComfData> comfDatas = MainActivityFragment.getInstance().getDBHelper().getLasComfData(1);
+        if (comfDatas.size() > 0){
+            clothingValue = comfDatas.get(0).clothingScore;
+            clothingTxt = comfDatas.get(0).clothing;
+
+            myClothingTextView.setText(String.valueOf(clothingValue));
+        }
+    }
 
     private void  configureButtons(View v){
 
@@ -95,8 +110,8 @@ public class VoteDialogFragment extends DialogFragment{
                         int room_humidity = Integer.parseInt(((EditText) rootView.findViewById(R.id.room_humidity)).getText().toString());
                         int vote = Integer.parseInt(myVoteTextView.getText().toString());
 
-
-                        MainActivityFragment.getInstance().storeData(vote,room_tempreture, room_humidity);
+                        int locationType = (inBuildingChk.isChecked()? 0:1);
+                        MainActivityFragment.getInstance().storeData(vote,room_tempreture, room_humidity, clothingTxt, clothingValue, locationType);
 
                         dismiss();
                     } catch (NumberFormatException nfe) {
@@ -132,7 +147,7 @@ public class VoteDialogFragment extends DialogFragment{
     }
 
     private void showColthingDialog(){
-         alertDialog = new AlertDialog.Builder(getActivity()).create();
+        alertDialog = new AlertDialog.Builder(getActivity()).create();
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View clothingView = (View) inflater.inflate(R.layout.alert_dialog_clothing, null);
 

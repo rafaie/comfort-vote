@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -34,7 +35,7 @@ public class ComfService extends Service {
     private DatabaseHelper databaseHelper = null;
 
     // constant
-    public static final long NOTIFY_INTERVAL = 1000 * 90; // 900 seconds
+    public static final long NOTIFY_INTERVAL = 1000 * 900; // 900 seconds
 
     // run on another Thread to avoid crash
     private Handler mHandler = new Handler();
@@ -125,9 +126,11 @@ public class ComfService extends Service {
 
     private void storeSensorData(ComfData comfData) {
         try{
+            String currentTime = DateFormat.format("MM/dd/yyyy HH:mm:ss", System.currentTimeMillis()).toString();
             Dao<ComfData, Integer> dao = getDBHelper().getComfDataDao();
             ComfData comfDataNew = ComfData.newInstance(comfData);
             comfDataNew.dataType = 10;
+            comfDataNew.currentTime = currentTime;
             dao.create(comfDataNew);
 
         } catch (SQLException e){

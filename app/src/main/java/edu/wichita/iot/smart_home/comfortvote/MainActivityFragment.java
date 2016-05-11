@@ -242,14 +242,14 @@ public class MainActivityFragment extends Fragment {
     /**
      * You'll need this in your class to get the helper from the manager once per class.
      */
-    private DatabaseHelper getDBHelper() {
+    public DatabaseHelper getDBHelper() {
         if (databaseHelper == null) {
             databaseHelper = DatabaseHelper.getHelper(getActivity().getBaseContext());
         }
         return databaseHelper;
     }
 
-    public void storeData(int vote, float roomTempreture, float roomHumidity) throws SQLException {
+    public void storeData(int vote, float roomTempreture, float roomHumidity, String clothingTxt, float clothingValue, int locationType) throws SQLException {
         Dao<ComfData, Integer> dao = getDBHelper().getComfDataDao();
 
         String currentTime = DateFormat.format("MM/dd/yyyy HH:mm:ss", System.currentTimeMillis()).toString();
@@ -260,6 +260,10 @@ public class MainActivityFragment extends Fragment {
         comfData.vote = vote;
         comfData.roomTempreture = roomTempreture;
         comfData.roomHumidity = roomHumidity;
+        comfData.clothing = clothingTxt;
+        comfData.clothingScore = clothingValue;
+        comfData.locationType = locationType;
+        comfData.dataType = 1;
 
         List<SensorData> sensorDatas = getDBHelper().getLasSensorData(2);
         if (sensorDatas.size() >= 2){
