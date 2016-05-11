@@ -47,13 +47,13 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Share"
+                android:text="Cancel"
                 android:id="@+id/btn_clothing_cancel"
                 />
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Clear"
+                android:text="Confirm"
                 android:id="@+id/btn_clothing_save"
                 />
         </LinearLayout>
