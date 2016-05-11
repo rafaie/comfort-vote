@@ -176,5 +176,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		return list;
 	}
 
+	public List<ComfData> getLasComfData(int number){
+		List<ComfData> list=null;
+		try {
+			QueryBuilder<ComfData, Integer> builder = getComfDataDao().queryBuilder();
+			builder.limit(number);
+			builder.orderBy("id", false);  // true for ascending, false for descending
+			list = getComfDataDao().query(builder.prepare());  // returns list of ten items
+		} catch (SQLException e){
+			System.out.println(e);
+		}
+		return list;
+	}
 
 }
