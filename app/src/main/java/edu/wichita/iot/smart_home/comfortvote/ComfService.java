@@ -20,6 +20,7 @@ import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -42,8 +43,8 @@ public class ComfService extends Service {
     private DatabaseHelper databaseHelper = null;
 
     // constant
-    public static final long SAMPELING_INTERVAL = 1000 * 900; // 900 seconds
-    private static final long NOTIFICATION_INTERVAL = 30 * 1000;
+    public static final long SAMPELING_INTERVAL = 1000 * 300; // 300 seconds
+    private static final long NOTIFICATION_INTERVAL = 1000 * 1800; // 1800 seconds
 
     // run on another Thread to avoid crash
     private Handler mHandler = new Handler();
@@ -91,9 +92,9 @@ public class ComfService extends Service {
         });
 
         // schedule task
-        mTimer.scheduleAtFixedRate(new SampelingTimerTask(), 0, SAMPELING_INTERVAL);
         Date date1 = new Date();
         date1.setSeconds(0);
+        mTimer.scheduleAtFixedRate(new SampelingTimerTask(), date1, SAMPELING_INTERVAL);
         mTimer2.scheduleAtFixedRate(new NotificationTimerTask(), date1, NOTIFICATION_INTERVAL);
     }
 
@@ -106,11 +107,14 @@ public class ComfService extends Service {
 
                 @Override
                 public void run() {
-                    activateSmartband();
-//                    activeTime = System.currentTimeMillis();
-//                    Toast.makeText(getApplicationContext(), getDateTime() + " Smartband is activated!",
-//                            Toast.LENGTH_SHORT).show();
-//                    Log.d(TAG, "Timer working now !!!");
+                    int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+                    int minute = Calendar.getInstance().get(Calendar.MINUTE);
+
+                    if (hour > 7 && hour <= 23) {
+                        activateSmartband();
+                    } else if (minute % 15 < 5.5){
+                        activateSmartband();
+                    }
                 }
 
             });
@@ -127,13 +131,11 @@ public class ComfService extends Service {
 
                 @Override
                 public void run() {
-//                    activeTime = System.currentTimeMillis();
-//                    Toast.makeText(getApplicationContext(), getDateTime() + " Notification is activated!",
-//                            Toast.LENGTH_SHORT).show();
-
-                raiseNotification();
+                    int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+                    if (hour > 8 && hour < 23){
+                        raiseNotification();
+                    }
                 }
-
             });
         }
     }
