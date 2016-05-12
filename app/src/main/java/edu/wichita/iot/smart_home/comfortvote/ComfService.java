@@ -95,7 +95,10 @@ public class ComfService extends Service {
         Date date1 = new Date();
         date1.setSeconds(0);
         mTimer.scheduleAtFixedRate(new SampelingTimerTask(), date1, SAMPELING_INTERVAL);
-        mTimer2.scheduleAtFixedRate(new NotificationTimerTask(), date1, NOTIFICATION_INTERVAL);
+        Date date2 = new Date();
+        date2.setSeconds(0);
+        date2.setMinutes(0);
+        mTimer2.scheduleAtFixedRate(new NotificationTimerTask(), date2, NOTIFICATION_INTERVAL);
     }
 
     class SampelingTimerTask extends TimerTask {
