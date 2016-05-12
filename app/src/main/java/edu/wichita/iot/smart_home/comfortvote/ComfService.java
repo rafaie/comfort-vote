@@ -1,10 +1,17 @@
 package edu.wichita.iot.smart_home.comfortvote;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.support.v7.app.NotificationCompat;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.Toast;
@@ -35,12 +42,14 @@ public class ComfService extends Service {
     private DatabaseHelper databaseHelper = null;
 
     // constant
-    public static final long NOTIFY_INTERVAL = 1000 * 900; // 900 seconds
+    public static final long SAMPELING_INTERVAL = 1000 * 900; // 900 seconds
+    private static final long NOTIFICATION_INTERVAL = 30 * 1000;
 
     // run on another Thread to avoid crash
     private Handler mHandler = new Handler();
     // timer handling
     private Timer mTimer = null;
+    private Timer mTimer2 = null;
 
     private SmartBand smartBand;
     private long activeTime = 0;
@@ -62,6 +71,13 @@ public class ComfService extends Service {
             mTimer = new Timer();
         }
 
+        if(mTimer2 != null) {
+            mTimer2.cancel();
+        } else {
+            // recreate new
+            mTimer2 = new Timer();
+        }
+
         smartBand = new SmartBand(new SensorUpdateCallback() {
             @Override
             public void update(ComfData comfData, int sensorType) {
@@ -75,10 +91,13 @@ public class ComfService extends Service {
         });
 
         // schedule task
-        mTimer.scheduleAtFixedRate(new TimeDisplayTimerTask(), 0, NOTIFY_INTERVAL);
+        mTimer.scheduleAtFixedRate(new SampelingTimerTask(), 0, SAMPELING_INTERVAL);
+        Date date1 = new Date();
+        date1.setSeconds(0);
+        mTimer2.scheduleAtFixedRate(new NotificationTimerTask(), date1, NOTIFICATION_INTERVAL);
     }
 
-    class TimeDisplayTimerTask extends TimerTask {
+    class SampelingTimerTask extends TimerTask {
 
         @Override
         public void run() {
@@ -88,14 +107,59 @@ public class ComfService extends Service {
                 @Override
                 public void run() {
                     activateSmartband();
-                    activeTime = System.currentTimeMillis();
-                    Toast.makeText(getApplicationContext(), getDateTime() + " Smartband is activated!",
-                            Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "Timer working now !!!");
+//                    activeTime = System.currentTimeMillis();
+//                    Toast.makeText(getApplicationContext(), getDateTime() + " Smartband is activated!",
+//                            Toast.LENGTH_SHORT).show();
+//                    Log.d(TAG, "Timer working now !!!");
                 }
 
             });
         }
+
+    }
+
+    class NotificationTimerTask extends TimerTask {
+
+        @Override
+        public void run() {
+            // run on another thread
+            mHandler.post(new Runnable() {
+
+                @Override
+                public void run() {
+//                    activeTime = System.currentTimeMillis();
+//                    Toast.makeText(getApplicationContext(), getDateTime() + " Notification is activated!",
+//                            Toast.LENGTH_SHORT).show();
+
+                raiseNotification();
+                }
+
+            });
+        }
+    }
+
+    //Thanks from http://www.tutorialspoint.com/android/android_notifications.htm
+    private void raiseNotification(){
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+        mBuilder.setSmallIcon(R.mipmap.hvac_flat_icons);
+        mBuilder.setContentTitle("Comfort Vote, Click Me!");
+        mBuilder.setContentText("Hi, It's time to make a new vote!");
+        //Ton
+        mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(MainActivity.class);
+
+        // Adds the Intent that starts the Activity to the top of the stack
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+// notificationID allows you to update the notification later on.
+        mNotificationManager.notify(0, mBuilder.build());
 
     }
 
