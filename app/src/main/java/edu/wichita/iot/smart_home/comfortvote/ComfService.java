@@ -113,7 +113,7 @@ public class ComfService extends Service {
                 public void run() {
                     int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
                     int minute = Calendar.getInstance().get(Calendar.MINUTE);
-
+                    activeTime = System.currentTimeMillis();
                     activateSmartband();
 //                    if (hour > 7 && hour <= 23) {
 //                        activateSmartband();
