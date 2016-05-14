@@ -94,6 +94,7 @@ public class ComfService extends Service {
         // schedule task
         Date date1 = new Date();
         date1.setSeconds(0);
+        date1.setMinutes(0);
         mTimer.scheduleAtFixedRate(new SampelingTimerTask(), date1, SAMPELING_INTERVAL);
         Date date2 = new Date();
         date2.setSeconds(0);
@@ -113,11 +114,12 @@ public class ComfService extends Service {
                     int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
                     int minute = Calendar.getInstance().get(Calendar.MINUTE);
 
-                    if (hour > 7 && hour <= 23) {
-                        activateSmartband();
-                    } else if (minute % 15 < 5.5){
-                        activateSmartband();
-                    }
+                    activateSmartband();
+//                    if (hour > 7 && hour <= 23) {
+//                        activateSmartband();
+//                    } else if (minute % 15 < 5.5){
+//                        activateSmartband();
+//                    }
                 }
 
             });
@@ -179,8 +181,8 @@ public class ComfService extends Service {
                 storeTime = System.currentTimeMillis();
                 storeSensorData(comfData);
                 smartBand.pause();
-                Toast.makeText(getApplicationContext(), getDateTime() + " Data is Stored!",
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), getDateTime() + " Data is Stored!",
+//                        Toast.LENGTH_SHORT).show();
             }
         }
     }

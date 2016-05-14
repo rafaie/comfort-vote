@@ -106,12 +106,12 @@ public class VoteDialogFragment extends DialogFragment{
                     showDialog("Please update room humidity!");
                 } else{
                     try {
-                        int room_tempreture = Integer.parseInt(((EditText) rootView.findViewById(R.id.room_tempreture)).getText().toString());
-                        int room_humidity = Integer.parseInt(((EditText) rootView.findViewById(R.id.room_humidity)).getText().toString());
+                        float room_temperature = Float.parseFloat(((EditText) rootView.findViewById(R.id.room_tempreture)).getText().toString());
+                        float room_humidity = Float.parseFloat(((EditText) rootView.findViewById(R.id.room_humidity)).getText().toString());
                         int vote = Integer.parseInt(myVoteTextView.getText().toString());
 
                         int locationType = (inBuildingChk.isChecked()? 0:1);
-                        MainActivityFragment.getInstance().storeData(vote,room_tempreture, room_humidity, clothingTxt, clothingValue, locationType);
+                        MainActivityFragment.getInstance().storeData(vote,room_temperature, room_humidity, clothingTxt, clothingValue, locationType);
 
                         dismiss();
                     } catch (NumberFormatException nfe) {
