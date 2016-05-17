@@ -43,7 +43,7 @@ public class ComfService extends Service {
     private DatabaseHelper databaseHelper = null;
 
     // constant
-    public static final long SAMPELING_INTERVAL = 1000 * 300; // 300 seconds
+    public static final long SAMPELING_INTERVAL = 1000 * 60; // 300 seconds
     private static final long NOTIFICATION_INTERVAL = 1000 * 1800; // 1800 seconds
 
     // run on another Thread to avoid crash
@@ -55,7 +55,7 @@ public class ComfService extends Service {
     private SmartBand smartBand;
     private long activeTime = 0;
     private long storeTime = 0;
-    private static final long SENSOR_WAIT_TIME = 15 * 1000;
+    private static final long SENSOR_WAIT_TIME = 25 * 1000;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -93,13 +93,14 @@ public class ComfService extends Service {
 
         // schedule task
         Date date1 = new Date();
-        date1.setSeconds(0);
-        date1.setMinutes(0);
+//        date1.setSeconds(0);
+//        date1.setMinutes(0);
+        date1.setTime(1451606400* 1000);
         mTimer.scheduleAtFixedRate(new SampelingTimerTask(), date1, SAMPELING_INTERVAL);
-        Date date2 = new Date();
-        date2.setSeconds(0);
-        date2.setMinutes(0);
-        mTimer2.scheduleAtFixedRate(new NotificationTimerTask(), date2, NOTIFICATION_INTERVAL);
+//        Date date2 = new Date();
+//        date2.setSeconds(0);
+//        date2.setMinutes(0);
+        mTimer2.scheduleAtFixedRate(new NotificationTimerTask(), date1, NOTIFICATION_INTERVAL);
     }
 
     class SampelingTimerTask extends TimerTask {
