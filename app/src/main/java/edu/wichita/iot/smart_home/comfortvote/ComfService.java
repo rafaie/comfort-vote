@@ -167,6 +167,7 @@ public class ComfService extends Service {
     }
 
     private void activateSmartband(){
+        activeTime = System.currentTimeMillis();
         smartBand.activateInBackground(this.getBaseContext());
     }
 
