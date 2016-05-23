@@ -286,6 +286,13 @@ public class SmartBand {
         new HeartRateSubscriptionTask().execute();
     }
 
+    public void activateSilent(Activity activity){
+        serviceType = RUN_IN_FOREGROUND;
+        this.activity = activity;
+        final WeakReference<Activity> reference = new WeakReference<>(activity);
+        new HeartRateSubscriptionTask().execute();
+    }
+
 
     public void activateForSampling(Activity activity){
         serviceType = RUN_FOR_SAMPLING;

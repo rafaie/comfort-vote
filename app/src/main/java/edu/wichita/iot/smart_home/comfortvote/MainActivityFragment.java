@@ -131,6 +131,7 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
+//        smartBand.activateSilent(getActivity());
         return rootView;
     }
 
