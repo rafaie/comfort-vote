@@ -43,7 +43,7 @@ public class ComfService extends Service {
     private DatabaseHelper databaseHelper = null;
 
     // constant
-    public static final long SAMPELING_INTERVAL = 1000 * 60; // 300 seconds
+    public static final long SAMPELING_INTERVAL = 1000 * 30; // 300 seconds
     private static final long NOTIFICATION_INTERVAL = 1000 * 1800; // 1800 seconds
 
     // run on another Thread to avoid crash
@@ -79,18 +79,6 @@ public class ComfService extends Service {
             mTimer2 = new Timer();
         }
 
-        smartBand = new SmartBand(new SensorUpdateCallback() {
-            @Override
-            public void update(ComfData comfData, int sensorType) {
-                saveSampple(comfData, sensorType);
-            }
-        }, new AppendToLogCallback() {
-            @Override
-            public void append(String str) {
-
-            }
-        });
-
         // schedule task
         Date date1 = new Date();
         date1.setTime(0);
@@ -107,20 +95,12 @@ public class ComfService extends Service {
 
                 @Override
                 public void run() {
-                    int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-                    int minute = Calendar.getInstance().get(Calendar.MINUTE);
                     activeTime = System.currentTimeMillis();
                     activateSmartband();
-//                    if (hour > 7 && hour <= 23) {
-//                        activateSmartband();
-//                    } else if (minute % 15 < 5.5){
-//                        activateSmartband();
-//                    }
                 }
 
             });
         }
-
     }
 
     class NotificationTimerTask extends TimerTask {
@@ -166,20 +146,34 @@ public class ComfService extends Service {
 
     }
 
-    private void activateSmartband(){
+    private void activateSmartband() {
+
+        smartBand = new SmartBand(new SensorUpdateCallback() {
+            @Override
+            public void update(ComfData comfData, int sensorType) {
+                saveSampple(comfData, sensorType);
+            }
+        }, new AppendToLogCallback() {
+            @Override
+            public void append(String str) {
+
+            }
+        });
+
         activeTime = System.currentTimeMillis();
         smartBand.activateInBackground(this.getBaseContext());
     }
 
     private void saveSampple(ComfData comfData, int sensorType) {
 
-        if (System.currentTimeMillis() - activeTime > SENSOR_WAIT_TIME) {
+        if (System.currentTimeMillis() - activeTime > SENSOR_WAIT_TIME ) {
             if (System.currentTimeMillis() - storeTime > SENSOR_WAIT_TIME) {
                 storeTime = System.currentTimeMillis();
                 storeSensorData(comfData);
                 smartBand.pause();
-//                Toast.makeText(getApplicationContext(), getDateTime() + " Data is Stored!",
-//                        Toast.LENGTH_SHORT).show();
+                smartBand = null;
+                Toast.makeText(getApplicationContext(), getDateTime() + " Data is Stored!",
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }
