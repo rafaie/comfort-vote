@@ -122,7 +122,57 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return settingDao;
     }
 
-    /**
+
+	public SettingData getSettignData(){
+		try {
+			Dao<SettingData, Integer> settingDao = getSettingDataDao();
+			if (settingDao.countOf() >  1){
+				TableUtils.clearTable(connectionSource, SettingData.class);
+			}
+
+			if (settingDao.countOf() == 0){
+				SettingData settingData = new SettingData();
+				settingData.samplingInterval  = 30;
+				settingData.samplingWaitTime = 15 ;
+				settingData.notificationInterval = 0;
+
+				settingDao.create(settingData);
+				return settingData;
+			}
+			return settingDao.queryForAll().get(0);
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public void saveSettignData(int samplingInterval, int samplingWaitTime, int notificationInterval){
+		try {
+			Dao<SettingData, Integer> settingDao = getSettingDataDao();
+			if (settingDao.countOf() >  1){
+				TableUtils.clearTable(connectionSource, SettingData.class);
+			}
+
+			SettingData settingData;
+			if (settingDao.countOf() == 0) {
+				settingData = new SettingData();
+				settingDao.create(settingData);
+			} else {
+				settingData = settingDao.queryForAll().get(0);
+			}
+
+			settingData.samplingInterval = samplingInterval;
+			settingData.samplingWaitTime   = samplingWaitTime;
+			settingData.notificationInterval = notificationInterval;
+			settingDao.update(settingData);
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+	}
+
+
+
+	/**
 	 * Close the database connections and clear any cached DAOs. For each call to {@link #getHelper(Context)}, there
 	 * should be 1 and only 1 call to this method. If there were 3 calls to {@link #getHelper(Context)} then on the 3rd
 	 * call to this method, the helper and the underlying database connections will be closed.

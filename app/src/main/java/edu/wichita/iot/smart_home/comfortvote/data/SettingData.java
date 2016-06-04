@@ -11,15 +11,12 @@ public class SettingData {
     public int id;
 
     @DatabaseField
-    public String currentTime;
+    public int samplingInterval;
 
     @DatabaseField
-    public String heartRateQuality;
+    public int samplingWaitTime;
 
     @DatabaseField
-    public int heartRate;
-
-    @DatabaseField
-    public float accelerometerX;
+    public int notificationInterval;
 
 }

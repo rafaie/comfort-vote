@@ -17,6 +17,8 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.sql.SQLException;
 
+import edu.wichita.iot.smart_home.comfortvote.data.SettingData;
+
 public class MainActivity extends AppCompatActivity {
 
     View bckgroundDimmer;
@@ -68,11 +70,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ((FloatingActionButton) findViewById(R.id.clear_db)).setOnClickListener(new View.OnClickListener() {
+        ((FloatingActionButton) findViewById(R.id.setting)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 floatingActionsMenu.collapse();
-                MainActivityFragment.getInstance().clearDB();
+                showSettingDialog();
             }
         });
 
@@ -108,6 +110,19 @@ public class MainActivity extends AppCompatActivity {
         dataSamplingFragment.show(ft, "dialog");
     }
 
+
+    public void showSettingDialog(){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        SettingDialogFragment settingDialogFragment = new SettingDialogFragment();
+        settingDialogFragment.show(ft, "dialog");
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

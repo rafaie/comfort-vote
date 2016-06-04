@@ -84,12 +84,12 @@
                 fab:fab_colorPressed="@color/white_pressed"/>
 
             <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/clear_db"
+                android:id="@+id/setting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_colorNormal="@color/white"
                 fab:fab_icon="@android:drawable/ic_menu_delete"
-                fab:fab_title="Clear database"
+                fab:fab_title="Setting"
                 fab:fab_colorPressed="@color/white_pressed"/>
 
         </com.getbase.floatingactionbutton.FloatingActionsMenu>

@@ -351,29 +351,6 @@ public class MainActivityFragment extends Fragment {
     }
 
 
-    public void clearDB(){
-
-        new AlertDialog.Builder(getActivity())
-                .setTitle("Alert")
-                .setMessage("Do you want to Clear the DB ?")
-                .setCancelable(true)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            getDBHelper().clearComfDaoTable();
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Nothing
-                    }
-                }).create().show();
-    }
-
 
     public void showDialog(String msgStr){
         new AlertDialog.Builder(getActivity())
